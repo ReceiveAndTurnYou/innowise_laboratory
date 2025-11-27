@@ -26,8 +26,8 @@ def add_student(): #function that adds new student
             }
             students.append(student_dict)
 
-    except KeyError:
-        print("Needed key not found")
+    except KeyError as e:
+        print(f"Needed key {e} was not found")
     except ValueError:
         print("Not valid name")
         student_name=""
@@ -48,7 +48,7 @@ def add_student_grade():
             choice_grade="!"
             while choice_grade != "done":
                 print("Type 'done' when ready")
-                choice_grade = int(input(f"Enter grade for {student_name} [0,100]:"))
+                choice_grade = int(input(f"Enter grade (or 'done' to finish) [0,100]:"))
 
                 if 0 <= choice_grade <= 100:
                     student["grades"].append(choice_grade)
@@ -57,15 +57,66 @@ def add_student_grade():
         else:
             print("No student was found with that name")
 
-    except KeyError:
-        print("Needed key not found")
+    except KeyError as e:
+        print(f"Needed key {e} was not found")
     except ValueError:
-        print("Enter a valid name or a number")
-
+        print("Invalid input. Please enter a number")
 
 def show_students():
-    print("Printing all students")
-    print(students)
+
+    if not students:
+        print("No students found")
+        return
+    try:
+
+        student_with_grades = 0
+        overall_average = 0
+        max_average = None
+        min_average = None
+        total_average = 0
+
+        for student in students:
+            print(f"Student Name: {student['name']}")
+            print(f"Student Grades: {student['grades']}")
+
+            if student['grades']:
+
+                grade_total = 0
+                average = 0
+
+                for grade in student['grades']:
+                    grade_total+=grade
+
+                average = grade_total/len(student['grades'])
+
+                if max_average is None or average > max_average:
+                    max_average = average
+                    best_student = student['name']
+
+                if min_average is None or average < min_average:
+                    min_average = average
+                    worst_student = student['name']
+
+                total_average += average
+
+                student_with_grades +=1
+
+                print(f"{student['name']} average grade is: {average}")
+
+            else:
+                print("No grades were found")
+                print("Average: N/A")
+
+        if student_with_grades > 0:
+            print(f"Max average: {max_average}")
+            print(f"Min average: {min_average}")
+            print(f"Overall average: {total_average/student_with_grades}")
+
+
+    except KeyError as e:
+        print(f"No {e} key was found")
+    except ZeroDivisionError:
+        print("Student has no grades")
 
 #menu options
 CONST_MENU_ADDSTUDENT = 1
@@ -87,10 +138,10 @@ while choice!=CONST_MENU_EXIT:
 
     if choice == CONST_MENU_ADDSTUDENT:
         add_student()
-    elif(choice == CONST_MENU_ADDGRADES):
+    elif choice == CONST_MENU_ADDGRADES:
         add_student_grade()
-    elif(choice ==CONST_MENU_SHOWREPORT):
+    elif choice ==CONST_MENU_SHOWREPORT:
         show_students()
-    elif(choice==CONST_MENU_FINDTOPPERFORMER):
+    elif choice==CONST_MENU_FINDTOPPERFORMER:
         print("")
     else: print("No such choice")
