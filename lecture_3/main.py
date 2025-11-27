@@ -32,8 +32,39 @@ def add_student(): #function that adds new student
         print("Not valid name")
         student_name=""
 
+def add_student_grade():
+    try:
+        student_name = input("Enter student name:")
+        student_name = student_name.title()
+
+        exists = False
+        for student in students:
+            if student.get("name") == student_name:
+                exists = True
+                break
+
+        if exists:
+
+            choice_grade="!"
+            while choice_grade != "done":
+                print("Type 'done' when ready")
+                choice_grade = int(input(f"Enter grade for {student_name} [0,100]:"))
+
+                if 0 <= choice_grade <= 100:
+                    student["grades"].append(choice_grade)
+                else:
+                    print("type corrent number! [0-100]")
+        else:
+            print("No student was found with that name")
+
+    except KeyError:
+        print("Needed key not found")
+    except ValueError:
+        print("Enter a valid name or a number")
+
 
 def show_students():
+    print("Printing all students")
     print(students)
 
 #menu options
@@ -57,8 +88,9 @@ while choice!=CONST_MENU_EXIT:
     if choice == CONST_MENU_ADDSTUDENT:
         add_student()
     elif(choice == CONST_MENU_ADDGRADES):
-        print("")
+        add_student_grade()
     elif(choice ==CONST_MENU_SHOWREPORT):
         show_students()
     elif(choice==CONST_MENU_FINDTOPPERFORMER):
         print("")
+    else: print("No such choice")
