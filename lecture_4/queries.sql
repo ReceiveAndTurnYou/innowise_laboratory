@@ -51,3 +51,60 @@ INSERT INTO grades (student_id, subject, grade) VALUES
 (9, 'English', 96),
 (9, 'Math', 89),
 (9, 'Art', 92);
+
+SELECT
+    s.full_name,
+    g.subject,
+    g.grade,
+    g.id as grade_id
+FROM students s
+JOIN grades g ON s.id = g.student_id
+WHERE s.full_name = 'Alice Johnson'
+ORDER BY g.subject;
+
+SELECT
+    s.full_name,
+    ROUND(AVG(g.grade), 2) as average_grade,
+    COUNT(g.id) as grades_count
+FROM students s
+LEFT JOIN grades g ON s.id = g.student_id
+GROUP BY s.id, s.full_name
+ORDER BY average_grade DESC;
+
+SELECT
+    full_name,
+    birth_year,
+    (2024 - birth_year) as age
+FROM students
+WHERE birth_year > 2004
+ORDER BY birth_year DESC;
+
+SELECT
+    subject,
+    ROUND(AVG(grade), 2) as average_grade,
+    COUNT(*) as grades_count,
+    MAX(grade) as highest_grade,
+    MIN(grade) as lowest_grade
+FROM grades
+GROUP BY subject
+ORDER BY average_grade DESC;
+
+SELECT
+    s.full_name,
+    ROUND(AVG(g.grade), 2) as average_grade,
+    COUNT(g.id) as grades_count
+FROM students s
+JOIN grades g ON s.id = g.student_id
+GROUP BY s.id, s.full_name
+HAVING COUNT(g.id) > 0
+ORDER BY average_grade DESC
+LIMIT 3;
+
+SELECT DISTINCT
+    s.full_name,
+    g.subject,
+    g.grade
+FROM students s
+JOIN grades g ON s.id = g.student_id
+WHERE g.grade < 80
+ORDER BY s.full_name, g.grade;
