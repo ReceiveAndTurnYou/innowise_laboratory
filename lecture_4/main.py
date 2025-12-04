@@ -1,5 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect('lecture_4.db')
-c = conn.cursor()
+conn = sqlite3.connect('school.db')
+cursor = conn.cursor()
 
+conn.close()
